@@ -84,3 +84,12 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: `Server Error: ${error.message}` });
     }
 };
+
+/**
+ * @desc    
+ * @route   
+ * @access  
+ */
+export const getMe = async (req, res) => {
+    res.status(200).json(req.user);
+};
