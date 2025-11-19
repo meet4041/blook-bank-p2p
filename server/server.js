@@ -1,39 +1,56 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-
-// --- Import your new routes ---
-import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
-import requestRoutes from './routes/requestRoutes.js';
-// Load environment variables
-dotenv.config();
-
-// Connect to MongoDB
-connectDB();
+const express = require('express');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
+
+// -----------------------------
+// ✅ FIXED CORS (MOST IMPORTANT)
+// -----------------------------
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend
+    methods: "GET,POST,PUT,PATCH,DELETE",
+    credentials: true
+  })
+);
+
+// -----------------------------
+// Middleware
+// -----------------------------
+app.use(morgan('dev'));
 app.use(express.json());
 
-// A simple test route
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+// -----------------------------
+// Routes
+// -----------------------------
+const authRoutes = require('./routes/auth');
+const donorRoutes = require('./routes/donors');
+const bloodRequestRoutes = require('./routes/bloodRequests');
 
-// --- Use the auth routes ---
-// Any request to /api/auth will be handled by authRoutes
 app.use('/api/auth', authRoutes);
+app.use('/api/donors', donorRoutes);
+app.use('/api/requests', bloodRequestRoutes);
 
-// --- Use the user routes ---
-// Any request to /api/users will be handled by userRoutes
-app.use('/api/users', userRoutes);
+// -----------------------------
+// MongoDB Connection
+// -----------------------------
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("Error Connecting DB:", err.message));
 
-// --- Use the request routes ---
-// Any request to /api/requests will be handled by requestRoutes
-app.use('/api/requests', requestRoutes);
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// -----------------------------
+// Basic Test Route
+// -----------------------------
+app.get('/', (req, res) => {
+  res.send("Blood Bank Backend Running");
 });
+
+// -----------------------------
+// Start Server
+// -----------------------------
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));

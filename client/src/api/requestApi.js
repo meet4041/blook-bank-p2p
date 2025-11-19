@@ -1,21 +1,8 @@
-import axios from "axios";
+import API from "./axiosConfig";
 
-export const createRequest = (data) =>
-  axios.post("/api/requests", data, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-export const getOutgoingRequests = () =>
-  axios.get("/api/requests/outgoing", {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-export const getIncomingRequests = () =>
-  axios.get("/api/requests/incoming", {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-export const updateRequestStatus = (id, status) =>
-  axios.put(`/api/requests/${id}`, status, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
+export const getRequests = () => API.get("/requests");
+export const getRequestById = (id) => API.get(`/requests/${id}`);
+export const createRequest = (data) => API.post("/requests", data);
+export const updateRequest = (id, data) => API.put(`/requests/${id}`, data);
+export const updateStatus = (id, data) => API.patch(`/requests/${id}/status`, data);
+export const deleteRequest = (id) => API.delete(`/requests/${id}`);
