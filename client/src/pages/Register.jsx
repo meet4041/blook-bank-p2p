@@ -1,11 +1,10 @@
 import React, { useState, useContext } from "react";
-import { registerUser } from "../api/authApi";
+import { AuthContext } from "../context/AuthContext";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
-  const { login } = useContext(AuthContext); // optional auto-login after register
+  const { login } = useContext(AuthContext); // auto-login after register
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -21,19 +20,31 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await registerUser(form);
+      const response = await fetch("http://localhost:8000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration Failed");
+      }
+
+      const data = await response.json();
       alert("Registration successful!");
 
-      // Optional: auto-login if token returned
-      if (res.data.token) {
-        login(res.data.token);
+      // Auto-login if token returned
+      if (data.token) {
+        login(data.token);
         navigate("/dashboard");
       } else {
         navigate("/login"); // fallback
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Registration Failed");
+      alert(err.message);
     }
   };
 

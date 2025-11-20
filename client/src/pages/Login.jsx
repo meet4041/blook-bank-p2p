@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { loginUser } from "../api/authApi";
+import { loginUser } from "../api/authApi"; // now fetch-based
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { token, login } = useContext(AuthContext); // get login function from context
+  const { token, login } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     email: "",
@@ -26,15 +26,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // fetch-based loginUser returns JSON directly
       const res = await loginUser(form);
 
-      // Use login from context instead of directly using localStorage
-      login(res.data.token);
+      // Use login function from context
+      login(res.token); // fetch API returns token directly
 
       alert("Login successful!");
       navigate("/dashboard");
     } catch (err) {
-      alert(err.response?.data?.message || "Login Failed");
+      alert(err.message || "Login Failed"); // fetch errors are caught here
     }
   };
 
