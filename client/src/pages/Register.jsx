@@ -50,17 +50,58 @@ const Register = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 5 }}>
-        <Typography variant="h4" align="center">Register</Typography>
+      <header>
+        <Typography variant="h4" align="center" component="h1" sx={{ mt: 5 }}>
+          Register
+        </Typography>
+      </header>
 
-        <form onSubmit={handleSubmit}>
-          <TextField fullWidth label="Name" name="name" margin="normal" onChange={handleChange} />
-          <TextField fullWidth label="Email" name="email" type="email" margin="normal" onChange={handleChange} />
-          <TextField fullWidth label="Password" type="password" name="password" margin="normal" onChange={handleChange} />
+      <main>
+        <section>
+          <Box sx={{ mt: 3 }}>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Name"
+                name="name"
+                margin="normal"
+                onChange={handleChange}
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                margin="normal"
+                onChange={handleChange}
+              />
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                name="password"
+                margin="normal"
+                onChange={handleChange}
+              />
 
-          <Button variant="contained" fullWidth type="submit" sx={{ mt: 3 }}>Register</Button>
-        </form>
-      </Box>
+              <Button
+                variant="contained"
+                fullWidth
+                type="submit"
+                sx={{ mt: 3 }}
+              >
+                Register
+              </Button>
+            </form>
+          </Box>
+        </section>
+      </main>
+
+      <footer>
+        <Typography variant="body2" align="center" sx={{ mt: 5, mb: 2 }}>
+          &copy; {new Date().getFullYear()} YourAppName. All rights reserved.
+        </Typography>
+      </footer>
     </Container>
   );
 };

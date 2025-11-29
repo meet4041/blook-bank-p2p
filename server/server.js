@@ -2,16 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); // Must be first
 
 const app = express();
 
 // -----------------------------
-// ✅ FIXED CORS (MOST IMPORTANT)
+// ✅ FIXED CORS
 // -----------------------------
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend
+    origin: "http://localhost:3000", // your frontend URL
     methods: "GET,POST,PUT,PATCH,DELETE",
     credentials: true
   })
@@ -35,12 +35,23 @@ app.use('/api/donors', donorRoutes);
 app.use('/api/requests', bloodRequestRoutes);
 
 // -----------------------------
+// Check if MONGO_URI is loaded
+// -----------------------------
+if (!process.env.MONGO_URI) {
+  console.error("Error: MONGO_URI not found in .env");
+  process.exit(1); // Stop server
+}
+
+// -----------------------------
 // MongoDB Connection
 // -----------------------------
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("Error Connecting DB:", err.message));
+  .catch(err => console.error("Error Connecting DB:", err.message));
 
 // -----------------------------
 // Basic Test Route

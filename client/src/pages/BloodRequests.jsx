@@ -1,37 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { getRequests, deleteRequest, updateStatus } from "../api/requestApi";
-import { Button, Container, Typography, Card, CardContent, Box } from "@mui/material";
+import { getRequests, deleteRequest } from "../api/requestApi";
+import { Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const BloodRequests = () => {
-  const [requests, setRequests] = useState([]);
+const BloodRequest = () => {
   const navigate = useNavigate();
+  const [requests, setRequests] = useState([]);
 
   const fetchRequests = async () => {
     try {
-      const res = await getRequests();
-      setRequests(res.data);
+      const data = await getRequests();
+      setRequests(data);
     } catch (err) {
-      alert("Failed to load requests");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this request?")) return;
-    try {
-      await deleteRequest(id);
-      fetchRequests();
-    } catch (err) {
-      alert("Failed to delete request");
-    }
-  };
-
-  const handleStatus = async (id, status) => {
-    try {
-      await updateStatus(id, { status });
-      fetchRequests();
-    } catch (err) {
-      alert("Failed to update status");
+      console.error("Error fetching requests:", err);
     }
   };
 
@@ -39,59 +20,104 @@ const BloodRequests = () => {
     fetchRequests();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this request?")) return;
+
+    try {
+      await deleteRequest(id);
+      fetchRequests();
+    } catch (err) {
+      alert("Failed to delete");
+    }
+  };
+
   return (
-    <Container sx={{ mt: 5 }}>
-      <Typography variant="h4" align="center">Blood Requests</Typography>
+    <main>
+      <Container maxWidth="md" sx={{ mt: 5 }}>
+        
+        {/* HEADER */}
+        <header>
+          <Typography variant="h4" align="center">
+            Blood Requests
+          </Typography>
+        </header>
 
-      <Button
-        variant="contained"
-        sx={{ my: 3 }}
-        onClick={() => navigate("/add-request")}
-      >
-        Add Request
-      </Button>
+        {/* ACTION SECTION */}
+        <section style={{ marginTop: "20px", textAlign: "center" }}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/add-request")}
+            sx={{ mb: 3 }}
+          >
+            Add New Request
+          </Button>
+        </section>
 
-      {requests.map((req) => (
-        <Card key={req._id} sx={{ mb: 2 }}>
-          <CardContent>
-            <Typography variant="h6">{req.patientName}</Typography>
-            <Typography>Blood Group: {req.bloodGroup}</Typography>
-            <Typography>Units: {req.unitsRequired}</Typography>
-            <Typography>Hospital: {req.hospital}</Typography>
-            <Typography>City: {req.city}</Typography>
-            <Typography>Status: {req.status}</Typography>
+        {/* LIST SECTION */}
+        <section>
+          {requests.length === 0 ? (
+            <Typography align="center" sx={{ mt: 3 }}>
+              No blood requests found.
+            </Typography>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {requests.map((req) => (
+                <li
+                  key={req._id}
+                  style={{
+                    background: "#fff",
+                    padding: "16px",
+                    marginBottom: "12px",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  {/* Request Details Section */}
+                  <section>
+                    <Typography variant="h6">{req.patientName}</Typography>
+                    <Typography>
+                      Blood Group: <strong>{req.bloodGroup}</strong>
+                    </Typography>
+                    <Typography>
+                      Units Needed: <strong>{req.units}</strong>
+                    </Typography>
+                    <Typography>
+                      Hospital: <strong>{req.hospital}</strong>
+                    </Typography>
+                    <Typography>
+                      City: <strong>{req.city}</strong>
+                    </Typography>
+                  </section>
 
-            <Box sx={{ mt: 2 }}>
-              <Button
-                variant="outlined"
-                sx={{ mr: 1 }}
-                onClick={() => handleStatus(req._id, "approved")}
-              >
-                Approve
-              </Button>
+                  {/* ACTION BUTTONS */}
+                  <nav style={{ display: "flex", gap: "8px" }}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => navigate(`/edit-request/${req._id}`)}
+                    >
+                      Edit
+                    </Button>
 
-              <Button
-                variant="outlined"
-                color="warning"
-                sx={{ mr: 1 }}
-                onClick={() => handleStatus(req._id, "rejected")}
-              >
-                Reject
-              </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleDelete(req._id)}
+                    >
+                      Delete
+                    </Button>
+                  </nav>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
 
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => handleDelete(req._id)}
-              >
-                Delete
-              </Button>
-            </Box>
-          </CardContent>
-        </Card>
-      ))}
-    </Container>
+      </Container>
+    </main>
   );
 };
 
-export default BloodRequests;
+export default BloodRequest;
