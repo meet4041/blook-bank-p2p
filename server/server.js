@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config(); // Must be first
 
@@ -20,7 +19,6 @@ app.use(
 // -----------------------------
 // Middleware
 // -----------------------------
-app.use(morgan('dev'));
 app.use(express.json());
 
 // -----------------------------
