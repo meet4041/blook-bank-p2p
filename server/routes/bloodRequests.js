@@ -17,8 +17,9 @@ const {
 router.get('/', getAllRequests);
 router.get('/:id', getRequestById);
 
-// Authenticated users
-router.post('/', authMiddleware, roleMiddleware.allowRoles('user'), createBloodRequest);
+// Authenticated users - CHANGED: Added 'hospital' to allowRoles
+router.post('/', authMiddleware, roleMiddleware.allowRoles('user', 'hospital'), createBloodRequest);
+
 router.put('/:id', authMiddleware, roleMiddleware.allowRoles('user', 'admin'), updateBloodRequest);
 router.patch('/:id', authMiddleware, roleMiddleware.allowRoles('user', 'admin'), patchBloodRequest);
 router.delete('/:id', authMiddleware, roleMiddleware.allowRoles('user', 'admin'), deleteBloodRequest);

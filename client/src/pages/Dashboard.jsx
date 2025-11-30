@@ -30,8 +30,10 @@ const Dashboard = () => {
       }
     };
 
-    fetchDashboardData();
-  }, []);
+    if (user) {
+      fetchDashboardData();
+    }
+  }, [user]);
 
   const getStat = (key, fallbackKey) => {
     if (!stats) return 0;
@@ -76,7 +78,7 @@ const Dashboard = () => {
           </p>
         </header>
 
-        {/* Stats Grid */}
+        {/* Stats Grid - Now Uniform for All Roles */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white p-4 rounded-lg shadow text-center">
             <div className="text-2xl font-bold text-red-600">{verifiedDonorsCount}</div>

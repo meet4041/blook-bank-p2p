@@ -53,35 +53,35 @@ const getAdminStats = async () => {
   };
 };
 
-const getHospitalStats = async (hospitalId) => {
+const getHospitalStats = async () => {
   const [
     verifiedDonorsCount,
     pendingRequestsCount,
-    myTotalDonors,
-    myTotalRequests, 
-    myRecentDonors,
-    myPendingRequests
+    totalDonors,
+    totalRequests, 
+    recentDonors,
+    recentRequests
   ] = await Promise.all([
-    Donor.countDocuments({ verified: true, addedBy: hospitalId }),
-    BloodRequest.countDocuments({ status: 'pending', requestedBy: hospitalId }),
-    Donor.countDocuments({ addedBy: hospitalId }),
-    BloodRequest.countDocuments({ requestedBy: hospitalId }), 
-    Donor.find({ addedBy: hospitalId }).sort({ createdAt: -1 }).limit(5),
-    BloodRequest.find({ status: 'pending', requestedBy: hospitalId }).sort({ createdAt: -1 }).limit(5)
+    Donor.countDocuments({ verified: true }),
+    BloodRequest.countDocuments({ status: 'pending' }),
+    Donor.countDocuments(), 
+    BloodRequest.countDocuments(), 
+    Donor.find().sort({ createdAt: -1 }).limit(5), 
+    BloodRequest.find().populate('requestedBy', 'name').sort({ createdAt: -1 }).limit(5) 
   ]);
 
   return {
     verifiedDonorsCount,
     pendingRequestsCount,
-    myTotalDonors,
-    myTotalRequests,
-    myRecentDonors,
-    myPendingRequests,
+    totalDonors,
+    totalRequests,
+    recentDonors,
+    recentRequests,
     role: 'hospital'
   };
 };
 
-const getUserStats = async (userId) => {
+const getUserStats = async () => {
   const [
     verifiedDonorsCount,
     pendingRequestsCount,

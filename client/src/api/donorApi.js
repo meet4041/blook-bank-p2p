@@ -47,3 +47,11 @@ export const deleteDonor = async (id) => {
     const result = await handleResponse(res);
     return result;
 };
+
+export const verifyDonor = async (id) => {
+    const res = await fetch(`${BASE_URL}/donors/${id}/verify`, {
+        method: 'PATCH', //
+        headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+};

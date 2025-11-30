@@ -2,21 +2,25 @@ const BloodRequest = require('../models/BloodRequest');
 
 /**************************************
  * CREATE BLOOD REQUEST  
- * Only Users can create  
+ * Users & Hospitals can create  
  **************************************/
 exports.createBloodRequest = async (req, res) => {
   try {
-    if (req.user.role !== "user") {
+    // CHANGED: Allow both 'user' and 'hospital' roles
+    if (!["user", "hospital"].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        error: "Only users can create blood requests"
+        error: "Only users and hospitals can create blood requests"
       });
     }
+
+    // OPTIONAL: Auto-approve requests created by Hospitals
+    const initialStatus = req.user.role === 'hospital' ? 'approved' : 'pending';
 
     const request = new BloodRequest({
       ...req.body,
       requestedBy: req.user.id,
-      status: "pending"
+      status: initialStatus
     });
 
     const saved = await request.save();
@@ -182,7 +186,7 @@ exports.updateStatus = async (req, res) => {
     }
 
     const { status } = req.body;
-    const allowed = ["pending", "approved", "processing", "fulfilled", "rejected", "closed"];
+    const allowed = ["pending", "approved"];
 
     if (!allowed.includes(status)) {
       return res.status(400).json({ success: false, error: "Invalid status value" });

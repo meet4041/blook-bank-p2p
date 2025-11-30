@@ -22,12 +22,12 @@ const Navbar = () => {
 
   return (
     <header className="bg-red-600 text-white">
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-4 py-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h1 className="text-lg font-semibold">
             <button
               onClick={() => navigate("/dashboard")}
-              className="text-white text-lg transition"
+              className="text-white text-xl transition"
             >
               Blood Bank Management
             </button>
@@ -40,32 +40,32 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               {user && (
-                <span className="text-sm text-red-200">
+                <span className="text-lg text-red-200">
                   Welcome, {user.name}
                 </span>
               )}
               <button
                 onClick={() => navigate("/dashboard")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Dashboard
               </button>
               <button
                 onClick={() => navigate("/donors")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Donors
               </button>
               <button
                 onClick={() => navigate("/requests")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Requests
               </button>
 
               <button
                 onClick={handleLogout}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Logout
               </button>
@@ -74,19 +74,19 @@ const Navbar = () => {
             <>
               <button
                 onClick={() => navigate("/")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Home
               </button>
               <button
                 onClick={() => navigate("/login")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Login
               </button>
               <button
                 onClick={() => navigate("/register")}
-                className="text-white text-sm hover:text-red-200 transition"
+                className="text-white text-lg hover:text-red-200 transition"
               >
                 Register
               </button>
