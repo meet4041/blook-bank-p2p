@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+
 // -------------------------------------------
 // APP INIT
 // -------------------------------------------
@@ -32,6 +33,8 @@ app.use(
     credentials: true
   })
 );
+
+app.use('/api/dashboard', require('./routes/dashboard'));
 
 // -------------------------------------------
 // SECURITY & RATE LIMIT

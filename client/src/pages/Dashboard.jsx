@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import QuoteWidget from "../components/NearbyCenters";
+import { BASE_URL, getAuthHeaders, handleResponse } from "../api/apiClient";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -10,17 +11,18 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching dashboard data
     const fetchDashboardData = async () => {
       try {
-        // Mock data - you'll replace this with actual API call
-        const mockStats = {
-          verifiedDonors: 24,
-          pendingRequests: 8,
-          totalDonors: 42,
-          completedRequests: 15
-        };
-        setStats(mockStats);
+        const response = await fetch(`${BASE_URL}/dashboard`, {
+          method: 'GET',
+          headers: getAuthHeaders(),
+        });
+
+        const result = await handleResponse(response);
+
+        if (result.success) {
+          setStats(result.data);
+        }
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       } finally {
@@ -30,6 +32,17 @@ const Dashboard = () => {
 
     fetchDashboardData();
   }, []);
+
+  // Helper to safely get counts
+  const getStat = (key, fallbackKey) => {
+    if (!stats) return 0;
+    return stats[key] !== undefined ? stats[key] : (stats[fallbackKey] || 0);
+  };
+
+  const verifiedDonorsCount = getStat('verifiedDonorsCount');
+  const pendingRequestsCount = getStat('pendingRequestsCount');
+  const totalDonorsCount = getStat('totalDonors', 'myTotalDonors');
+  const totalRequestsCount = getStat('totalRequests', 'myTotalRequests');
 
   if (loading) {
     return (
@@ -65,26 +78,24 @@ const Dashboard = () => {
         </header>
 
         {/* Stats Grid */}
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-red-600">{stats.verifiedDonors}</div>
-              <div className="text-sm text-gray-600">Verified Donors</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-yellow-600">{stats.pendingRequests}</div>
-              <div className="text-sm text-gray-600">Pending Requests</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-blue-600">{stats.totalDonors}</div>
-              <div className="text-sm text-gray-600">Total Donors</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.completedRequests}</div>
-              <div className="text-sm text-gray-600">Completed Requests</div>
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white p-4 rounded-lg shadow text-center">
+            <div className="text-2xl font-bold text-red-600">{verifiedDonorsCount}</div>
+            <div className="text-sm text-gray-600">Verified Donors</div>
           </div>
-        )}
+          <div className="bg-white p-4 rounded-lg shadow text-center">
+            <div className="text-2xl font-bold text-yellow-600">{pendingRequestsCount}</div>
+            <div className="text-sm text-gray-600">Pending Requests</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow text-center">
+            <div className="text-2xl font-bold text-blue-600">{totalDonorsCount}</div>
+            <div className="text-sm text-gray-600">Total Donors</div>
+          </div>
+          <div className="bg-white p-4 rounded-lg shadow text-center">
+            <div className="text-2xl font-bold text-green-600">{totalRequestsCount}</div>
+            <div className="text-sm text-gray-600">Total Requests</div>
+          </div>
+        </div>
 
         {/* Overpass widget */}
         <div className="mb-8">
@@ -106,8 +117,7 @@ const Dashboard = () => {
             >
               Manage Requests
             </button>
-            
-            {/* Show Add Donor button only for hospital/admin roles */}
+
             {(user?.role === 'hospital' || user?.role === 'admin') && (
               <button
                 className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
@@ -116,7 +126,7 @@ const Dashboard = () => {
                 Add Donor
               </button>
             )}
-            
+
             <button
               className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
               onClick={() => navigate("/add-request")}
@@ -125,7 +135,6 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {/* Show message if user can't add donors */}
           {user?.role === 'user' && (
             <div className="mt-4 text-sm text-gray-600">
               <p>Note: Only Hospital and Admin users can add donors. Contact administrator for access.</p>
