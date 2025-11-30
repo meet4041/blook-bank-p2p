@@ -106,12 +106,17 @@ const Dashboard = () => {
             >
               Manage Requests
             </button>
-            <button
-              className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
-              onClick={() => navigate("/add-donor")}
-            >
-              Add Donor
-            </button>
+            
+            {/* Show Add Donor button only for hospital/admin roles */}
+            {(user?.role === 'hospital' || user?.role === 'admin') && (
+              <button
+                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
+                onClick={() => navigate("/add-donor")}
+              >
+                Add Donor
+              </button>
+            )}
+            
             <button
               className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
               onClick={() => navigate("/add-request")}
@@ -119,6 +124,13 @@ const Dashboard = () => {
               Add Request
             </button>
           </div>
+
+          {/* Show message if user can't add donors */}
+          {user?.role === 'user' && (
+            <div className="mt-4 text-sm text-gray-600">
+              <p>Note: Only Hospital and Admin users can add donors. Contact administrator for access.</p>
+            </div>
+          )}
         </section>
       </div>
     </main>

@@ -19,7 +19,8 @@ exports.registerUser = async (req, res) => {
 
     const { name, email, password, role } = req.body;
 
-    const allowedRoles = ["user"];
+    // FIX: Allow all roles for registration
+    const allowedRoles = ["user", "hospital", "admin"];
     const assignedRole = allowedRoles.includes(role) ? role : "user";
 
     const exists = await User.findOne({ email });
@@ -28,7 +29,6 @@ exports.registerUser = async (req, res) => {
     }
 
     const user = await User.create({ name, email, password, role: assignedRole });
-
     const token = generateToken(user);
 
     res.status(201).json({
@@ -43,7 +43,6 @@ exports.registerUser = async (req, res) => {
         }
       }
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,

@@ -13,7 +13,8 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    role: "user" // Add role field
   });
 
   const handleChange = (e) => {
@@ -23,7 +24,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!form.name || !form.email || !form.password) {
       setError("Please fill in all required fields");
       return;
@@ -47,15 +48,16 @@ const Register = () => {
       const result = await registerUser({
         name: form.name,
         email: form.email,
-        password: form.password
+        password: form.password,
+        role: form.role // Include role in registration
       });
       console.log("Registration response:", result);
-
+      
       if (result.token) {
         login(result.token, result.user);
         navigate("/dashboard");
       } else {
-        setError("Registration successful but no token received");
+        setError("Registration successful but no authentication token received");
       }
     } catch (err) {
       console.error("Registration error:", err);
@@ -80,35 +82,50 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium">Name</label>
-              <input
-                name="name"
+              <input 
+                name="name" 
                 value={form.name}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                onChange={handleChange} 
+                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2" 
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium">Email</label>
-              <input
-                name="email"
-                type="email"
+              <input 
+                name="email" 
+                type="email" 
                 value={form.email}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                onChange={handleChange} 
+                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2" 
                 required
               />
             </div>
 
+            {/* ADD ROLE SELECTION */}
             <div>
-              <label className="block text-sm font-medium">Password</label>
-              <input
-                name="password"
-                type="password"
-                value={form.password}
+              <label className="block text-sm font-medium">Role</label>
+              <select
+                name="role"
+                value={form.role}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+              >
+                <option value="user">User</option>
+                <option value="hospital">Hospital</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">Password</label>
+              <input 
+                name="password" 
+                type="password" 
+                value={form.password}
+                onChange={handleChange} 
+                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2" 
                 required
                 minLength="6"
               />
@@ -116,19 +133,19 @@ const Register = () => {
 
             <div>
               <label className="block text-sm font-medium">Confirm Password</label>
-              <input
-                name="confirmPassword"
-                type="password"
+              <input 
+                name="confirmPassword" 
+                type="password" 
                 value={form.confirmPassword}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                onChange={handleChange} 
+                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2" 
                 required
               />
             </div>
 
             <div>
-              <button
-                type="submit"
+              <button 
+                type="submit" 
                 disabled={loading}
                 className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700 disabled:opacity-50"
               >

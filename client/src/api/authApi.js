@@ -3,18 +3,13 @@ import { BASE_URL, handleResponse } from './apiClient';
 export const registerUser = async (data) => {
   try {
     console.log("Sending registration request to:", `${BASE_URL}/auth/register`);
-    console.log("Request data:", data);
     
     const response = await fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        password: data.password
-      }),
+      body: JSON.stringify(data),
     });
 
     console.log("Response status:", response.status);
@@ -22,11 +17,10 @@ export const registerUser = async (data) => {
     const result = await handleResponse(response);
     console.log("Raw registration response:", result);
     
-    // Backend returns: { success: true, data: { token, user: { id, name, email, role } } }
+    // FIX: Handle backend response structure { success: true, data: { token, user } }
     if (result.success && result.data && result.data.token && result.data.user) {
       console.log("Registration successful!");
-      // Return the nested data structure
-      return result.data; // Returns { token, user }
+      return result.data; // Return { token, user }
     } else {
       console.log("Unexpected response structure:", result);
       throw new Error(result.error || 'Registration failed - unexpected response');
@@ -55,11 +49,10 @@ export const loginUser = async (data) => {
     const result = await handleResponse(response);
     console.log("Raw login response:", result);
     
-    // Backend returns: { success: true, data: { token, user: { id, name, email, role } } }
+    // FIX: Handle backend response structure { success: true, data: { token, user } }
     if (result.success && result.data && result.data.token && result.data.user) {
       console.log("Login successful!");
-      // Return the nested data structure
-      return result.data; // Returns { token, user }
+      return result.data; // Return { token, user }
     } else {
       console.log("Unexpected response structure:", result);
       throw new Error(result.error || 'Login failed - unexpected response');
