@@ -109,13 +109,13 @@ const Dashboard = () => {
               className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition shadow"
               onClick={() => navigate("/donors")}
             >
-              Manage Donors
+              View Donors
             </button>
             <button
               className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition shadow"
               onClick={() => navigate("/requests")}
             >
-              Manage Requests
+              View Requests
             </button>
 
             {(user?.role === 'hospital' || user?.role === 'admin') && (
