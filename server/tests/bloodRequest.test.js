@@ -20,11 +20,9 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  // Clear all collections before each test
   await User.deleteMany({});
   await BloodRequest.deleteMany({});
 
-  // Create users with UNIQUE emails for this test file
   const user = await User.create({ 
     name: 'BloodRequest User', 
     email: 'bloodrequest-user@test.com',
@@ -48,7 +46,6 @@ beforeEach(async () => {
   hospitalId = hospital._id;
   adminId = admin._id;
 
-  // Generate JWT tokens
   userToken = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET);
   hospitalToken = jwt.sign({ id: hospital._id, role: 'hospital' }, process.env.JWT_SECRET);
   adminToken = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET);

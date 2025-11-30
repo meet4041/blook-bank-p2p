@@ -12,8 +12,6 @@ exports.getDashboardStats = async (req, res) => {
     } else if (role === 'hospital') {
       stats = await getHospitalStats(userId);
     } else {
-      // Pass userId in case we want personalized stats later, 
-      // but for now we return global Total Requests
       stats = await getUserStats(userId);
     }
 
@@ -30,7 +28,7 @@ const getAdminStats = async () => {
     pendingRequestsCount,
     totalHospitals,
     totalDonors,
-    totalRequests, // <--- Already counts all requests
+    totalRequests, 
     recentDonors,
     recentRequests
   ] = await Promise.all([
@@ -38,7 +36,7 @@ const getAdminStats = async () => {
     BloodRequest.countDocuments({ status: 'pending' }),
     User.countDocuments({ role: 'hospital' }),
     Donor.countDocuments(),
-    BloodRequest.countDocuments(), // <--- All requests
+    BloodRequest.countDocuments(), 
     Donor.find().sort({ createdAt: -1 }).limit(5),
     BloodRequest.find().populate('requestedBy', 'name').sort({ createdAt: -1 }).limit(5)
   ]);
@@ -60,14 +58,14 @@ const getHospitalStats = async (hospitalId) => {
     verifiedDonorsCount,
     pendingRequestsCount,
     myTotalDonors,
-    myTotalRequests, // <--- Counts requests by this hospital
+    myTotalRequests, 
     myRecentDonors,
     myPendingRequests
   ] = await Promise.all([
     Donor.countDocuments({ verified: true, addedBy: hospitalId }),
     BloodRequest.countDocuments({ status: 'pending', requestedBy: hospitalId }),
     Donor.countDocuments({ addedBy: hospitalId }),
-    BloodRequest.countDocuments({ requestedBy: hospitalId }), // <--- Requests by Hospital
+    BloodRequest.countDocuments({ requestedBy: hospitalId }), 
     Donor.find({ addedBy: hospitalId }).sort({ createdAt: -1 }).limit(5),
     BloodRequest.find({ status: 'pending', requestedBy: hospitalId }).sort({ createdAt: -1 }).limit(5)
   ]);
@@ -88,13 +86,13 @@ const getUserStats = async (userId) => {
     verifiedDonorsCount,
     pendingRequestsCount,
     totalDonors,
-    totalRequests, // <--- Added this: Global Total Requests
+    totalRequests, 
     availableDonorsByBloodGroup
   ] = await Promise.all([
     Donor.countDocuments({ verified: true }),
     BloodRequest.countDocuments({ status: 'pending' }),
     Donor.countDocuments(),
-    BloodRequest.countDocuments(), // <--- Count ALL requests in system
+    BloodRequest.countDocuments(), 
     Donor.aggregate([
       { $match: { verified: true } },
       { $group: { _id: '$bloodGroup', count: { $sum: 1 } } }
@@ -105,7 +103,7 @@ const getUserStats = async (userId) => {
     verifiedDonorsCount,
     pendingRequestsCount,
     totalDonors,
-    totalRequests, // <--- Return it
+    totalRequests, 
     availableDonorsByBloodGroup,
     role: 'user'
   };

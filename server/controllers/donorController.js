@@ -52,7 +52,6 @@ exports.createDonor = async (req, res) => {
     if (req.user.role === "hospital") {
       if (req.body.addedBy) addedBy = req.body.addedBy;
 
-      // Hospital adding itself → auto verified
       if (addedBy.toString() === req.user.id) {
         verified = true;
         verifiedBy = req.user.id;

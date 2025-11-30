@@ -7,8 +7,6 @@ export const getDonors = async () => {
     });
     const result = await handleResponse(res);
     
-    // Backend returns: { success: true, data: [...] }
-    // Return the full response so component can handle the structure
     return result;
 };
 

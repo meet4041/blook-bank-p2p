@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
   const login = (token, user = null) => {
     localStorage.setItem('token', token);
     if (user) {
-      // Backend sends user with 'id' field, store it as-is
       localStorage.setItem('user', JSON.stringify(user));
     }
     

@@ -14,7 +14,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user" // Add role field
+    role: "user" 
   });
 
   const handleChange = (e) => {
@@ -49,7 +49,7 @@ const Register = () => {
         name: form.name,
         email: form.email,
         password: form.password,
-        role: form.role // Include role in registration
+        role: form.role 
       });
       console.log("Registration response:", result);
       

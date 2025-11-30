@@ -35,7 +35,6 @@ export const handleResponse = async (response) => {
 
   if (!response.ok) {
     console.error("API error response:", data);
-    // Handle different error response structures
     if (data.error) {
       throw new Error(data.error);
     } else if (data.message) {

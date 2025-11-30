@@ -17,10 +17,9 @@ export const registerUser = async (data) => {
     const result = await handleResponse(response);
     console.log("Raw registration response:", result);
     
-    // FIX: Handle backend response structure { success: true, data: { token, user } }
     if (result.success && result.data && result.data.token && result.data.user) {
       console.log("Registration successful!");
-      return result.data; // Return { token, user }
+      return result.data; 
     } else {
       console.log("Unexpected response structure:", result);
       throw new Error(result.error || 'Registration failed - unexpected response');
@@ -49,10 +48,9 @@ export const loginUser = async (data) => {
     const result = await handleResponse(response);
     console.log("Raw login response:", result);
     
-    // FIX: Handle backend response structure { success: true, data: { token, user } }
     if (result.success && result.data && result.data.token && result.data.user) {
       console.log("Login successful!");
-      return result.data; // Return { token, user }
+      return result.data; 
     } else {
       console.log("Unexpected response structure:", result);
       throw new Error(result.error || 'Login failed - unexpected response');

@@ -80,7 +80,6 @@ exports.updateBloodRequest = async (req, res) => {
 
     const isOwner = request.requestedBy.toString() === req.user.id;
 
-    // USER: can update own but cannot modify status
     if (req.user.role === "user") {
       if (!isOwner) {
         return res.status(403).json({
@@ -89,7 +88,6 @@ exports.updateBloodRequest = async (req, res) => {
         });
       }
 
-      // status protected for user
       delete req.body.status;
       delete req.body.processedBy;
       delete req.body.processedAt;

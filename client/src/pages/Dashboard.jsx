@@ -33,7 +33,6 @@ const Dashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // Helper to safely get counts
   const getStat = (key, fallbackKey) => {
     if (!stats) return 0;
     return stats[key] !== undefined ? stats[key] : (stats[fallbackKey] || 0);
@@ -84,13 +83,14 @@ const Dashboard = () => {
             <div className="text-sm text-gray-600">Verified Donors</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow text-center">
-            <div className="text-2xl font-bold text-yellow-600">{pendingRequestsCount}</div>
-            <div className="text-sm text-gray-600">Pending Requests</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow text-center">
             <div className="text-2xl font-bold text-blue-600">{totalDonorsCount}</div>
             <div className="text-sm text-gray-600">Total Donors</div>
           </div>
+          <div className="bg-white p-4 rounded-lg shadow text-center">
+            <div className="text-2xl font-bold text-yellow-600">{pendingRequestsCount}</div>
+            <div className="text-sm text-gray-600">Pending Requests</div>
+          </div>
+
           <div className="bg-white p-4 rounded-lg shadow text-center">
             <div className="text-2xl font-bold text-green-600">{totalRequestsCount}</div>
             <div className="text-sm text-gray-600">Total Requests</div>

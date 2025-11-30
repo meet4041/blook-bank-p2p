@@ -1,5 +1,3 @@
-// roleMiddleware.js
-
 /**
  * Allow selected roles
  * Example: router.post("/verify", auth, allowRoles("hospital"), controller.verifyDonor)
