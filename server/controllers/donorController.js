@@ -88,14 +88,12 @@ const modifyDonor = async (req, res) => {
       return res.status(404).json({ success: false, error: "Donor not found" });
     }
 
-    // USER → Only own donor
     if (req.user.role === "user") {
       if (donor.addedBy.toString() !== req.user.id) {
         return res.status(403).json({ success: false, error: "Not authorized to update this donor" });
       }
     }
 
-    // No one updates verification fields here
     delete req.body.verified;
     delete req.body.verifiedBy;
     delete req.body.verifiedAt;
@@ -125,7 +123,6 @@ exports.deleteDonor = async (req, res) => {
       return res.status(404).json({ success: false, error: "Donor not found" });
     }
 
-    // USER CANNOT DELETE OTHERS' DONORS
     if (req.user.role === "user" && donor.addedBy.toString() !== req.user.id) {
       return res.status(403).json({ success: false, error: "Not authorized to delete this donor" });
     }

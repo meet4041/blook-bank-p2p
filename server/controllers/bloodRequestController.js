@@ -6,7 +6,6 @@ const BloodRequest = require('../models/BloodRequest');
  **************************************/
 exports.createBloodRequest = async (req, res) => {
   try {
-    // CHANGED: Allow both 'user' and 'hospital' roles
     if (!["user", "hospital"].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
@@ -14,7 +13,6 @@ exports.createBloodRequest = async (req, res) => {
       });
     }
 
-    // OPTIONAL: Auto-approve requests created by Hospitals
     const initialStatus = req.user.role === 'hospital' ? 'approved' : 'pending';
 
     const request = new BloodRequest({

@@ -1,4 +1,3 @@
-// Prevent the real DB connection during tests by mocking the connectDB helper.
 jest.mock('../config/db', () => jest.fn());
 const request = require('supertest');
 const app = require('../server');

@@ -1,6 +1,5 @@
 const User = require('../models/User');
 
-// Get all standard Users
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({ role: 'user' }).select('-password').sort({ createdAt: -1 });
@@ -10,7 +9,6 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Get all Hospitals
 exports.getAllHospitals = async (req, res) => {
   try {
     const hospitals = await User.find({ role: 'hospital' }).select('-password').sort({ createdAt: -1 });
@@ -20,7 +18,6 @@ exports.getAllHospitals = async (req, res) => {
   }
 };
 
-// Delete a User or Hospital
 exports.deleteUser = async (req, res) => {
   try {
     const userToDelete = await User.findById(req.params.id);
@@ -29,7 +26,6 @@ exports.deleteUser = async (req, res) => {
       return res.status(404).json({ success: false, error: "User not found" });
     }
 
-    // Prevent Admin from deleting themselves (optional safety)
     if (userToDelete._id.toString() === req.user.id) {
        return res.status(400).json({ success: false, error: "You cannot delete your own admin account." });
     }

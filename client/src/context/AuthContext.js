@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: false
   });
 
-  // Initialize auth state from localStorage on app start
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');

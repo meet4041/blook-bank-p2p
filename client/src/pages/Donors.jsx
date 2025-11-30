@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getDonors, verifyDonor } from "../api/donorApi";
-import { AuthContext } from "../context/AuthContext"; // Import AuthContext
+import { AuthContext } from "../context/AuthContext"; 
 
 const Donors = () => {
-  const { user } = useContext(AuthContext); // Get current user
+  const { user } = useContext(AuthContext); 
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -34,7 +34,6 @@ const Donors = () => {
     try {
       const response = await verifyDonor(id);
       if (response.success) {
-        // Update UI locally to show Verified immediately
         setDonors(donors.map(d => 
           d._id === id ? { ...d, verified: true } : d
         ));

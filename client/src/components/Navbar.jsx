@@ -5,9 +5,9 @@ import { AuthContext } from "../context/AuthContext";
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useContext(AuthContext);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [adminDropdown, setAdminDropdown] = useState(false); // NEW STATE
+  const [adminDropdown, setAdminDropdown] = useState(false); 
   const navigate = useNavigate();
-  const dropdownRef = useRef(null); // Ref for clicking outside
+  const dropdownRef = useRef(null); 
 
   const toggleMobile = () => setMobileOpen((s) => !s);
 
@@ -23,7 +23,6 @@ const Navbar = () => {
     setAdminDropdown(false);
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

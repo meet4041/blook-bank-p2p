@@ -25,7 +25,7 @@ const AllUsers = () => {
     if (!window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) return;
     try {
       await deleteUser(id);
-      setUsers(users.filter((u) => u._id !== id)); // Remove from UI
+      setUsers(users.filter((u) => u._id !== id)); 
     } catch (err) {
       alert("Failed to delete user: " + err.message);
     }

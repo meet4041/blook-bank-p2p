@@ -45,7 +45,6 @@ beforeEach(async () => {
   userId = user._id;
   hospitalId = hospital._id;
   adminId = admin._id;
-
   userToken = jwt.sign({ id: user._id, role: 'user' }, process.env.JWT_SECRET);
   hospitalToken = jwt.sign({ id: hospital._id, role: 'hospital' }, process.env.JWT_SECRET);
   adminToken = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET);
@@ -61,7 +60,6 @@ describe('BloodRequest API', () => {
   let requestId;
 
   beforeEach(async () => {
-    // Create a fresh blood request before each test
     const bloodRequest = await BloodRequest.create({
       patientName: 'John Doe',
       bloodGroup: 'A+',

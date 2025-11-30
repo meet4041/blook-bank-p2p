@@ -19,7 +19,6 @@ beforeEach(async () => {
   await User.deleteMany({});
   await Donor.deleteMany({});
 
-  // Create users with UNIQUE emails for this test file
   const user = await User.create({ 
     name: 'Donor User', 
     email: 'donor-user@test.com',
@@ -58,7 +57,6 @@ describe('Donor API', () => {
   let userDonorId, hospitalDonorId;
 
   beforeEach(async () => {
-    // Create fresh donors before each test
     const hospitalDonorRes = await request(app)
       .post('/api/donors')
       .set('Authorization', `Bearer ${hospitalToken}`)
@@ -116,7 +114,6 @@ describe('Donor API', () => {
   });
 
   test('User updates own donor → cannot change verified field', async () => {
-    // First verify the donor
     await request(app)
       .patch(`/api/donors/${userDonorId}/verify`)
       .set('Authorization', `Bearer ${hospitalToken}`);
@@ -128,11 +125,10 @@ describe('Donor API', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.data.city).toBe('New City');
-    expect(res.body.data.verified).toBe(true); // verified remains unchanged
+    expect(res.body.data.verified).toBe(true); 
   });
 
   test('User patch own donor → partial update', async () => {
-    // First verify the donor
     await request(app)
       .patch(`/api/donors/${userDonorId}/verify`)
       .set('Authorization', `Bearer ${hospitalToken}`);
@@ -144,7 +140,7 @@ describe('Donor API', () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.data.phone).toBe('9999999999');
-    expect(res.body.data.verified).toBe(true); // verified remains unchanged
+    expect(res.body.data.verified).toBe(true); 
   });
 
   test('Another user cannot update donor', async () => {

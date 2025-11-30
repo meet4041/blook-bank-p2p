@@ -10,7 +10,6 @@ let hospitalToken, adminToken, userToken;
 let hospitalId, adminId, userId;
 
 beforeAll(async () => {
-  // Use test database
   const TEST_DB_URI = process.env.MONGO_URI_TEST || 'mongodb://localhost:27017/bloodbank_test';
   
   await mongoose.connect(TEST_DB_URI, {
@@ -20,29 +19,27 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  // Clear all collections
   await User.deleteMany({});
   await Donor.deleteMany({});
   await BloodRequest.deleteMany({});
 
-  // Create test users with UNIQUE emails for this test file
   const hospital = await User.create({ 
     name: 'Dashboard Hospital', 
-    email: 'dashboard-hospital@test.com', // Unique email
+    email: 'dashboard-hospital@test.com', 
     password: 'password', 
     role: 'hospital' 
   });
   
   const admin = await User.create({ 
     name: 'Dashboard Admin', 
-    email: 'dashboard-admin@test.com', // Unique email
+    email: 'dashboard-admin@test.com', 
     password: 'password', 
     role: 'admin' 
   });
 
   const user = await User.create({ 
     name: 'Dashboard User', 
-    email: 'dashboard-user@test.com', // Unique email
+    email: 'dashboard-user@test.com', 
     password: 'password', 
     role: 'user' 
   });
@@ -51,12 +48,10 @@ beforeEach(async () => {
   adminId = admin._id;
   userId = user._id;
 
-  // Generate tokens
   hospitalToken = jwt.sign({ id: hospitalId, role: 'hospital' }, process.env.JWT_SECRET);
   adminToken = jwt.sign({ id: adminId, role: 'admin' }, process.env.JWT_SECRET);
   userToken = jwt.sign({ id: userId, role: 'user' }, process.env.JWT_SECRET);
 
-  // Create test data
   await createTestData();
 });
 
@@ -65,7 +60,6 @@ afterAll(async () => {
 });
 
 const createTestData = async () => {
-  // Create donors
   await Donor.create([
     {
       name: 'Verified Donor 1',
@@ -97,7 +91,6 @@ const createTestData = async () => {
     }
   ]);
 
-  // Create blood requests
   await BloodRequest.create([
     {
       patientName: 'Patient 1',

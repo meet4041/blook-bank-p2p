@@ -120,9 +120,6 @@ const Dashboard = () => {
               View Requests
             </button>
 
-            {/* CHANGED: Removed "Add Donor" button for Hospital */}
-            
-            {/* ONLY User and Hospital can add requests */}
             {(user?.role === 'user' || user?.role === 'hospital') && (
               <button
                 className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
@@ -133,7 +130,6 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* CHANGED: Updated helper text since Hospital can't add donors anymore */}
           {user?.role === 'user' && (
             <div className="mt-4 text-sm text-gray-600">
               <p>Contact administrator for any donor-related inquiries.</p>

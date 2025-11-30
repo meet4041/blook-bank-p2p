@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getRequests, updateStatus } from "../api/requestApi";
-import { AuthContext } from "../context/AuthContext"; // Import AuthContext
+import { AuthContext } from "../context/AuthContext"; 
 
 const BloodRequests = () => {
-  const { user } = useContext(AuthContext); // Get current user
+  const { user } = useContext(AuthContext); 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [updating, setUpdating] = useState(null); // Track which ID is updating
+  const [updating, setUpdating] = useState(null); 
 
   useEffect(() => {
     fetchRequests();
@@ -32,10 +32,9 @@ const BloodRequests = () => {
   const handleStatusChange = async (id, newStatus) => {
     try {
       setUpdating(id);
-      const response = await updateStatus(id, { status: newStatus }); //
+      const response = await updateStatus(id, { status: newStatus }); 
       
       if (response.success) {
-        // Update local state
         setRequests(requests.map(req => 
           req._id === id ? { ...req, status: newStatus } : req
         ));

@@ -8,15 +8,8 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
-
-// -------------------------------------------
-// APP INIT
-// -------------------------------------------
 const app = express();
 
-// -------------------------------------------
-// CORS CONFIGURATION
-// -------------------------------------------
 const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:3000',
   'http://localhost:3001'
@@ -35,32 +28,17 @@ app.use(
 );
 
 app.use('/api/dashboard', require('./routes/dashboard'));
-
-// -------------------------------------------
-// SECURITY & RATE LIMIT
-// -------------------------------------------
 app.use(helmet());
 
 const limiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 100 });
 app.use(limiter);
-
-// -------------------------------------------
-// LOGGING & JSON PARSING
-// -------------------------------------------
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// -------------------------------------------
-// STATIC FILES & VIEWS
-// -------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// -------------------------------------------
-// DATABASE CONNECTION
-// -------------------------------------------
 const connectDB = require('./config/db');
 
 if (!process.env.MONGO_URI) {
@@ -70,23 +48,18 @@ if (!process.env.MONGO_URI) {
 
 connectDB();
 
-// -------------------------------------------
-// API ROUTES
-// -------------------------------------------
 const authRoutes = require('./routes/auth');
 const donorRoutes = require('./routes/donors');
 const bloodRequestRoutes = require('./routes/bloodRequests');
 const dashboardRoutes = require('./routes/dashboard');
-const userRoutes = require('./routes/users'); // <--- IMPORT THIS
+const userRoutes = require('./routes/users'); 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/donors', donorRoutes);
 app.use('/api/requests', bloodRequestRoutes);
 app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/users', userRoutes); // <--- ADD THIS
+app.use('/api/users', userRoutes); 
 
-// -------------------------------------------
-// HOME ROUTE (Optional)
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'Blood Bank Backend',
@@ -106,9 +79,6 @@ app.get('/dashboard', async (req, res) => {
   res.render('dashboard', { totalDonors, verifiedDonors, pendingRequests, fulfilledRequests });
 });
 
-
-// -------------------------------------------
-// SERVE REACT BUILD (PRODUCTION)
 const clientBuildPath = path.join(__dirname, '..', 'client', 'build');
 
 if (fs.existsSync(clientBuildPath)) {
@@ -118,9 +88,6 @@ if (fs.existsSync(clientBuildPath)) {
   });
 }
 
-// -------------------------------------------
-// START SERVER
-// -------------------------------------------
 const PORT = process.env.PORT || 8000;
 
 if (require.main === module) {

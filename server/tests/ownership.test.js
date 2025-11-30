@@ -1,7 +1,6 @@
-// server/tests/ownership.test.js
 const request = require('supertest');
 const mongoose = require('mongoose');
-const server = require('../server'); // Express app exported from server.js
+const server = require('../server'); 
 
 let tokenA, tokenB, tokenAdmin;
 let requestIdOfA;
@@ -9,7 +8,6 @@ let requestIdOfA;
 beforeAll(async () => {
   jest.setTimeout(30000);
 
-  // REGISTER USER A
   const resA = await request(server)
     .post('/api/auth/register')
     .send({
@@ -19,11 +17,9 @@ beforeAll(async () => {
       role: 'user'
     });
   
-  // FIX: Extract token from data object
   tokenA = resA.body.data.token;
   console.log('User A token extracted:', !!tokenA);
 
-  // REGISTER USER B
   const resB = await request(server)
     .post('/api/auth/register')
     .send({
@@ -33,11 +29,9 @@ beforeAll(async () => {
       role: 'user'
     });
   
-  // FIX: Extract token from data object
   tokenB = resB.body.data.token;
   console.log('User B token extracted:', !!tokenB);
 
-  // REGISTER ADMIN
   const resAdmin = await request(server)
     .post('/api/auth/register')
     .send({
@@ -47,11 +41,9 @@ beforeAll(async () => {
       role: 'admin'
     });
   
-  // FIX: Extract token from data object
   tokenAdmin = resAdmin.body.data.token;
   console.log('Admin token extracted:', !!tokenAdmin);
 
-  // USER A CREATES A VALID BLOOD REQUEST
   const reqA = await request(server)
     .post('/api/requests')
     .set('Authorization', `Bearer ${tokenA}`)
@@ -63,13 +55,11 @@ beforeAll(async () => {
       city: 'Test City'
     });
 
-  // DEBUG: Log the response for troubleshooting
   console.log('Blood request creation response:', {
     status: reqA.statusCode,
     body: reqA.body
   });
 
-  // VERIFY SUCCESS
   expect(reqA.statusCode).toBe(201);
   expect(reqA.body.data).toBeDefined();
 
@@ -80,8 +70,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.connection.close();
 });
-
-// ---------------------------------------------------------------------
 
 describe('Ownership enforcement', () => {
   test("User B cannot delete User A's request", async () => {

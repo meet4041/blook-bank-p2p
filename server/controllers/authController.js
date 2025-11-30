@@ -18,8 +18,6 @@ exports.registerUser = async (req, res) => {
     }
 
     const { name, email, password, role } = req.body;
-
-    // FIX: Allow all roles for registration
     const allowedRoles = ["user", "hospital", "admin"];
     const assignedRole = allowedRoles.includes(role) ? role : "user";
 
