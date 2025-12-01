@@ -16,7 +16,10 @@ const {
 
 router.get('/', getAllDonors);
 router.get('/:id', getDonorById);
-router.post('/', authMiddleware, roleMiddleware.allowRoles('admin'), createDonor); 
+
+// Update: Allow 'user' to create donors. 'hospital' is excluded as per requirement.
+router.post('/', authMiddleware, roleMiddleware.allowRoles('admin', 'user'), createDonor); 
+
 router.put('/:id', authMiddleware, roleMiddleware.allowRoles('admin', 'hospital', 'user'), updateDonor);
 router.patch('/:id', authMiddleware, roleMiddleware.allowRoles('admin', 'hospital', 'user'), patchDonor);
 router.delete('/:id', authMiddleware, roleMiddleware.allowRoles('admin', 'hospital', 'user'), deleteDonor);

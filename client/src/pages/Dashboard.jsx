@@ -120,12 +120,23 @@ const Dashboard = () => {
               View Requests
             </button>
 
+            {/* Add Request: Available for User and Hospital */}
             {(user?.role === 'user' || user?.role === 'hospital') && (
               <button
                 className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
                 onClick={() => navigate("/add-request")}
               >
                 Add Request
+              </button>
+            )}
+
+            {/* Add Donor: Available for User ONLY */}
+            {user?.role === 'user' && (
+              <button
+                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition shadow"
+                onClick={() => navigate("/add-donor")}
+              >
+                Add Donor
               </button>
             )}
           </div>
